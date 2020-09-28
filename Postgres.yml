@@ -1,0 +1,33 @@
+services:
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - 1337:5432
+
+  adminer:
+    image: adminer
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - 8008:8080
+
+  api:
+    build: .
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - 1234:1234
+    environment:
+      API_PORT: 1234
+      DB_USER: user
+      DB_PASSWORD: password
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_INSTANCE: postgres
